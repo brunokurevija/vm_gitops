@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/MatanBudimir/virtualization-gitops.git
+    repoURL: https://github.com/brunokurevija/vm_gitops.git
     targetRevision: HEAD
     path: administration/vms
   destination:
