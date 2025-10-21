@@ -10,7 +10,7 @@ spec:
   #goTemplateOptions: ["missingkey=error"]
   generators:
   - git:
-      repoURL: https://github.com/brunokurevija/vm_gitops.gitt
+      repoURL: https://github.com/brunokurevija/vm_gitops.git
       revision: HEAD
       directories:
       - path: projects/vms/*
