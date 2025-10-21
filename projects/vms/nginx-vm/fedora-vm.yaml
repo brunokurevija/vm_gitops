@@ -1,0 +1,84 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  labels:
+    app: nginx-vm
+    kubevirt.io/dynamic-credentials-support: 'true'
+  name: nginx-vm
+  namespace: vm-gitops
+spec:
+  dataVolumeTemplates:
+    - apiVersion: cdi.kubevirt.io/v1beta1
+      kind: DataVolume
+      metadata:
+        name: nginx-vm
+      spec:
+        source:
+          pvc:
+            name: fedora-gitops-data-volume
+            namespace: vm-gitops
+        storage:
+          resources:
+            requests:
+              storage: 30Gi
+  runStrategy: RerunOnFailure
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/flavor: medium
+        vm.kubevirt.io/os: fedora
+        vm.kubevirt.io/workload: server
+      labels:
+        kubevirt.io/domain: nginx-vm
+        kubevirt.io/size: medium
+    spec:
+      architecture: amd64
+      domain:
+        cpu:
+          cores: 1
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+            - disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
+              name: cloudinitdisk
+          interfaces:
+            - macAddress: '02:95:df:00:00:0e'
+              masquerade: {}
+              model: virtio
+              name: default
+        features:
+          smm:
+            enabled: true
+        firmware:
+          bootloader:
+            efi: {}
+        machine:
+          type: pc-q35-rhel9.4.0
+        memory:
+          guest: 4Gi
+        resources: {}
+      networks:
+        - name: default
+          pod: {}
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - dataVolume:
+            name: nginx-vm
+          name: rootdisk
+        - cloudInitNoCloud:
+            userData: |-
+              #cloud-config
+              user: fedora
+              password: gitops-vm
+              chpasswd: { expire: false }
+              ssh_pwauth: true
+              runcmd:
+                - dnf install -y nginx
+                - systemctl enable nginx
+                - systemctl start nginx
+          name: cloudinitdisk

@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: vm-application-set
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  #goTemplate: true
+  #goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://github.com/MatanBudimir/virtualization-gitops.git
+      revision: HEAD
+      directories:
+      - path: projects/vms/*
+      requeueAfterSeconds: 30
+  template:
+    metadata:
+      name: '{{path.basenameNormalized}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/MatanBudimir/virtualization-gitops.git
+        targetRevision: HEAD
+        path: '{{path}}'
+        directory:
+          recurse: true
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: vm-gitops
+      syncPolicy:
+        automated: {}

@@ -1,0 +1,18 @@
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: fedora-gitops-data-volume
+  labels:
+    instancetype.kubevirt.io/default-instancetype: u1.medium
+    instancetype.kubevirt.io/default-preference: fedora
+  annotations:
+    cdi.kubevirt.io/storage.bind.immediate.requested: 'true'
+  namespace: vm-gitops
+spec:
+  source:
+    registry:
+      url: 'docker://quay.io/containerdisks/fedora:42'
+  storage:
+    resources:
+      requests:
+        storage: 30Gi
