@@ -10,7 +10,7 @@ spec:
   #goTemplateOptions: ["missingkey=error"]
   generators:
   - git:
-      repoURL: https://github.com/MatanBudimir/virtualization-gitops.git
+      repoURL: https://github.com/brunokurevija/vm_gitops.gitt
       revision: HEAD
       directories:
       - path: projects/vms/*
@@ -21,7 +21,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: https://github.com/MatanBudimir/virtualization-gitops.git
+        repoURL: https://github.com/brunokurevija/vm_gitops.git
         targetRevision: HEAD
         path: '{{path}}'
         directory:
