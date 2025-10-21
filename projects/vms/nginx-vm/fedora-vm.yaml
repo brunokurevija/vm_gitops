@@ -4,7 +4,7 @@ metadata:
   labels:
     app: nginx-vm
     kubevirt.io/dynamic-credentials-support: 'true'
-  name: nginx-vm
+  name: nginx-vm-2
   namespace: vm-gitops
 spec:
   dataVolumeTemplates:
